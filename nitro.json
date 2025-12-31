@@ -1,0 +1,13 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": ["torch"],
+  "ios": {
+    "iosModuleName": "RNTorch"
+  },
+  "android": {
+    "androidNamespace": ["torch"],
+    "androidCxxLibName": "RNTorch"
+  },
+  "autolinking": {},
+  "ignorePaths": ["**/node_modules"]
+}
