@@ -1,4 +1,4 @@
-package com.margelo.nitro.torch
+package com.lumawake.app.torch
 
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext

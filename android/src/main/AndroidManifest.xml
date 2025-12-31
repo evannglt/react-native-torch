@@ -1,2 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required for camera access to control torch -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Required for flashlight/torch functionality -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <!-- Specify that the app requires a camera with flash -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
 </manifest>

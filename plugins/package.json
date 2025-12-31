@@ -1,0 +1,40 @@
+{
+  "name": "@react-native-torch/expo-plugin",
+  "version": "1.0.0",
+  "description": "Expo config plugin for react-native-torch to automatically configure camera permissions and usage descriptions",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf build",
+    "prepare": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "expo",
+    "expo-plugin",
+    "config-plugin",
+    "react-native",
+    "torch",
+    "flashlight",
+    "camera",
+    "permissions"
+  ],
+  "author": "react-native-torch",
+  "license": "MIT",
+  "peerDependencies": {
+    "@expo/config-plugins": "^8.0.0",
+    "@expo/config-types": "^51.0.0"
+  },
+  "devDependencies": {
+    "@expo/config-plugins": "^8.0.8",
+    "@expo/config-types": "^51.0.2",
+    "typescript": "^5.8.3"
+  },
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

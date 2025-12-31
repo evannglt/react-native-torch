@@ -1,13 +1,18 @@
 {
   "$schema": "https://nitro.margelo.com/nitro.schema.json",
-  "cxxNamespace": ["torch"],
+  "cxxNamespace": ["lumawake", "app", "torch"],
   "ios": {
     "iosModuleName": "RNTorch"
   },
   "android": {
-    "androidNamespace": ["torch"],
+    "androidNamespace": ["lumawake", "app", "torch"],
     "androidCxxLibName": "RNTorch"
   },
-  "autolinking": {},
+  "autolinking": {
+    "RNTorch": {
+      "swift": "RNTorch",
+      "kotlin": "RNTorch"
+    }
+  },
   "ignorePaths": ["**/node_modules"]
 }
