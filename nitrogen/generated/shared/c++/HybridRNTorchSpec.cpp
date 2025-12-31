@@ -15,6 +15,7 @@ namespace margelo::nitro::lumawake::app::torch {
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridMethod("switchState", &HybridRNTorchSpec::switchState);
+      prototype.registerHybridMethod("getIntensity", &HybridRNTorchSpec::getIntensity);
       prototype.registerHybridMethod("requestCameraPermission", &HybridRNTorchSpec::requestCameraPermission);
       prototype.registerHybridMethod("isTorchAvailable", &HybridRNTorchSpec::isTorchAvailable);
       prototype.registerHybridMethod("getTorchState", &HybridRNTorchSpec::getTorchState);

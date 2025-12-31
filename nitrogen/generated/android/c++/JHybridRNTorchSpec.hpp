@@ -54,7 +54,8 @@ namespace margelo::nitro::lumawake::app::torch {
 
   public:
     // Methods
-    std::shared_ptr<Promise<void>> switchState(bool enabled) override;
+    std::shared_ptr<Promise<void>> switchState(bool enabled, std::optional<double> intensity) override;
+    std::shared_ptr<Promise<double>> getIntensity() override;
     std::shared_ptr<Promise<bool>> requestCameraPermission(const std::string& title, const std::string& message) override;
     std::shared_ptr<Promise<bool>> isTorchAvailable() override;
     std::shared_ptr<Promise<bool>> getTorchState() override;

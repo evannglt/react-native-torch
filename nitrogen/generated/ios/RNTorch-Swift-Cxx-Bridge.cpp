@@ -30,6 +30,14 @@ namespace margelo::nitro::lumawake::app::torch::bridge::swift {
     };
   }
   
+  // pragma MARK: std::function<void(double /* result */)>
+  Func_void_double create_Func_void_double(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = RNTorch::Func_void_double::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](double result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
   // pragma MARK: std::function<void(bool /* result */)>
   Func_void_bool create_Func_void_bool(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = RNTorch::Func_void_bool::fromUnsafe(swiftClosureWrapper);

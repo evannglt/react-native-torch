@@ -15,6 +15,7 @@ namespace RNTorch { class HybridRNTorchSpec_cxx; }
 
 
 #include <NitroModules/Promise.hpp>
+#include <optional>
 #include <string>
 
 #include "RNTorch-Swift-Cxx-Umbrella.hpp"
@@ -61,8 +62,16 @@ namespace margelo::nitro::lumawake::app::torch {
 
   public:
     // Methods
-    inline std::shared_ptr<Promise<void>> switchState(bool enabled) override {
-      auto __result = _swiftPart.switchState(std::forward<decltype(enabled)>(enabled));
+    inline std::shared_ptr<Promise<void>> switchState(bool enabled, std::optional<double> intensity) override {
+      auto __result = _swiftPart.switchState(std::forward<decltype(enabled)>(enabled), intensity);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<double>> getIntensity() override {
+      auto __result = _swiftPart.getIntensity();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

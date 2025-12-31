@@ -14,7 +14,8 @@ public protocol HybridRNTorchSpec_protocol: HybridObject {
   
 
   // Methods
-  func switchState(enabled: Bool) throws -> Promise<Void>
+  func switchState(enabled: Bool, intensity: Double?) throws -> Promise<Void>
+  func getIntensity() throws -> Promise<Double>
   func requestCameraPermission(title: String, message: String) throws -> Promise<Bool>
   func isTorchAvailable() throws -> Promise<Bool>
   func getTorchState() throws -> Promise<Bool>

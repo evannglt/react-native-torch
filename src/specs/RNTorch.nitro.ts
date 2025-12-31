@@ -35,9 +35,11 @@ export interface RNTorch extends HybridObject<{
    * to handle permission requests properly.
    *
    * @param enabled - true to turn on the torch, false to turn it off
+   * @param intensity - optional intensity value between 0 and 1
    * @throws {Error} TorchError.DEVICE_NOT_AVAILABLE - Camera device is not available
    * @throws {Error} TorchError.TORCH_NOT_AVAILABLE - Torch is not available on this device
    * @throws {Error} TorchError.PERMISSION_DENIED - Camera permission denied
+   * @throws {Error} TorchError.INVALID_INTENSITY - Invalid intensity value provided
    * @throws {Error} TorchError.CONFIGURATION_FAILED - Failed to configure torch
    * @returns Promise that resolves when the torch state has been changed
    *
@@ -51,7 +53,24 @@ export interface RNTorch extends HybridObject<{
    * }
    * ```
    */
-  switchState(enabled: boolean): Promise<void>
+  switchState(enabled: boolean, intensity?: number): Promise<void>
+
+  /**
+   * Get the current torch intensity level.
+   *
+   * @returns Promise that resolves to the current torch intensity level (0.0 to 1.0)
+   *
+   * @example
+   * ```typescript
+   * try {
+   *   const intensity = await RNTorchModule.getIntensity();
+   *   console.log(`Current torch intensity: ${intensity}`);
+   * } catch (error) {
+   *   console.error('Failed to get torch intensity:', error.message);
+   * }
+   * ```
+   */
+  getIntensity(): Promise<number>
 
   /**
    * Request camera permission with a custom dialog.
@@ -135,6 +154,9 @@ export enum TorchErrorCode {
 
   /** Camera permission has been denied */
   PERMISSION_DENIED = 'PERMISSION_DENIED',
+
+  /** Invalid intensity value provided */
+  INVALID_INTENSITY = 'INVALID_INTENSITY',
 
   /** Failed to configure the torch (hardware error) */
   CONFIGURATION_FAILED = 'CONFIGURATION_FAILED',

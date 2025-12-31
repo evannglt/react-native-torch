@@ -12,6 +12,7 @@
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
 #include <NitroModules/JUnit.hpp>
+#include <optional>
 #include <string>
 
 namespace margelo::nitro::lumawake::app::torch {
@@ -46,13 +47,29 @@ namespace margelo::nitro::lumawake::app::torch {
   
 
   // Methods
-  std::shared_ptr<Promise<void>> JHybridRNTorchSpec::switchState(bool enabled) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jboolean /* enabled */)>("switchState");
-    auto __result = method(_javaPart, enabled);
+  std::shared_ptr<Promise<void>> JHybridRNTorchSpec::switchState(bool enabled, std::optional<double> intensity) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jboolean /* enabled */, jni::alias_ref<jni::JDouble> /* intensity */)>("switchState");
+    auto __result = method(_javaPart, enabled, intensity.has_value() ? jni::JDouble::valueOf(intensity.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
         __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<double>> JHybridRNTorchSpec::getIntensity() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getIntensity");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<double>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);

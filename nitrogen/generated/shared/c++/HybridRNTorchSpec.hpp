@@ -16,6 +16,7 @@
 
 
 #include <NitroModules/Promise.hpp>
+#include <optional>
 #include <string>
 
 namespace margelo::nitro::lumawake::app::torch {
@@ -49,7 +50,8 @@ namespace margelo::nitro::lumawake::app::torch {
 
     public:
       // Methods
-      virtual std::shared_ptr<Promise<void>> switchState(bool enabled) = 0;
+      virtual std::shared_ptr<Promise<void>> switchState(bool enabled, std::optional<double> intensity) = 0;
+      virtual std::shared_ptr<Promise<double>> getIntensity() = 0;
       virtual std::shared_ptr<Promise<bool>> requestCameraPermission(const std::string& title, const std::string& message) = 0;
       virtual std::shared_ptr<Promise<bool>> isTorchAvailable() = 0;
       virtual std::shared_ptr<Promise<bool>> getTorchState() = 0;

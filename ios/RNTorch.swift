@@ -9,6 +9,7 @@ public enum TorchBridgeError: LocalizedError {
     case deviceUnavailable
     case torchUnavailable
     case permissionDenied
+    case invalidIntensity
     case configurationFailed(String)
 
     public var errorDescription: String? {
@@ -19,6 +20,8 @@ public enum TorchBridgeError: LocalizedError {
             return "TORCH_NOT_AVAILABLE"
         case .permissionDenied:
             return "PERMISSION_DENIED"
+        case .invalidIntensity:
+            return "INVALID_INTENSITY: Must be between 0.0 and 1.0"
         case .configurationFailed(let message):
             return "CONFIGURATION_FAILED: \(message)"
         }
@@ -45,7 +48,7 @@ final class RNTorch: HybridRNTorchSpec {
 
     // MARK: Public Methods exposed to Nitro
 
-    public func switchState(enabled: Bool) -> NitroModules.Promise<Void> {
+    public func switchState(enabled: Bool, intensity: Double? = nil) -> NitroModules.Promise<Void> {
         NitroModules.Promise.async {
             guard let device = self.device else {
                 throw TorchBridgeError.deviceUnavailable
@@ -59,12 +62,39 @@ final class RNTorch: HybridRNTorchSpec {
                 defer { device.unlockForConfiguration() }
 
                 if enabled {
-                    try device.setTorchModeOn(level: 1.0)
+                    let level: Float
+                    if let intensity = intensity {
+                        guard (0.0...1.0).contains(intensity) else {
+                            throw TorchBridgeError.invalidIntensity
+                        }
+                        level = Float(intensity)
+                    } else {
+                        level = 1.0
+                    }
+                    try device.setTorchModeOn(level: level)
                 } else {
                     device.torchMode = .off
                 }
             } catch {
                 throw TorchBridgeError.configurationFailed(error.localizedDescription)
+            }
+        }
+    }
+
+    public func getIntensity() -> NitroModules.Promise<Double> {
+        NitroModules.Promise.async {
+            guard let device = self.device else {
+                throw TorchBridgeError.deviceUnavailable
+            }
+            guard device.hasTorch else {
+                throw TorchBridgeError.torchUnavailable
+            }
+
+            // Only valid if torch is on
+            if device.torchMode == .on {
+                return Double(device.torchLevel)
+            } else {
+                return 0.0
             }
         }
     }

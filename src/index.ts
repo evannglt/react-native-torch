@@ -40,7 +40,7 @@ export const RNTorchModule = NitroModules.createHybridObject<RNTorch>('RNTorch')
  * Convenience function to safely toggle torch state with automatic availability check.
  *
  * @param enabled - Whether to turn the torch on (true) or off (false)
- * @param requestPermission - Whether to request permission if needed (default: true)
+ * @param options - Optional configuration options
  * @returns Promise<boolean> - true if operation succeeded, false if torch unavailable
  *
  * @example
@@ -55,7 +55,7 @@ export const RNTorchModule = NitroModules.createHybridObject<RNTorch>('RNTorch')
  */
 export async function toggleTorch(
   enabled: boolean,
-  shouldRequestPermission: boolean = true
+  options?: { intensity?: number; shouldRequestPermission?: boolean }
 ): Promise<boolean> {
   try {
     // Check if torch is available
@@ -65,7 +65,7 @@ export async function toggleTorch(
     }
 
     // Request permission if needed (mainly for Android)
-    if (shouldRequestPermission) {
+    if (options?.shouldRequestPermission ?? true) {
       const hasPermission = await RNTorchModule.requestCameraPermission(
         'Camera Permission Required',
         'This app needs camera access to control the flashlight.'
@@ -76,12 +76,51 @@ export async function toggleTorch(
     }
 
     // Switch torch state
-    await RNTorchModule.switchState(enabled)
+    await RNTorchModule.switchState(enabled, options?.intensity)
     return true
   } catch (error) {
     console.warn('[react-native-torch] Failed to toggle torch:', error)
     return false
   }
+}
+
+/**
+ * Convenience function to set the torch intensity.
+ *
+ * @param intensity - The intensity level (0.0 to 1.0)
+ * @param shouldRequestPermission - Whether to request permission if needed (default: true)
+ * @returns Promise<boolean> - true if torch was turned on successfully
+ *
+ * @example
+ * ```typescript
+ * import { setTorchIntensity } from 'react-native-torch';
+ *
+ * const success = await setTorchIntensity(0.5);
+ * console.log(success ? 'Torch intensity set' : 'Failed to set torch intensity');
+ * ```
+ */
+export async function setTorchIntensity(
+  intensity: number,
+  shouldRequestPermission: boolean = true
+): Promise<boolean> {
+  return toggleTorch(true, { intensity, shouldRequestPermission })
+}
+
+/**
+ * Convenience function to get the current torch intensity level.
+ *
+ * @returns Promise<number> - The current torch intensity level (0.0 to 1.0)
+ *
+ * @example
+ * ```typescript
+ * import { getTorchIntensity } from 'react-native-torch';
+ *
+ * const intensity = await getTorchIntensity();
+ * console.log(`Current torch intensity: ${intensity}`);
+ * ```
+ */
+export async function getTorchIntensity(): Promise<number> {
+  return RNTorchModule.getIntensity()
 }
 
 /**
@@ -101,7 +140,7 @@ export async function toggleTorch(
 export async function turnOnTorch(
   shouldRequestPermission: boolean = true
 ): Promise<boolean> {
-  return toggleTorch(true, shouldRequestPermission)
+  return toggleTorch(true, { shouldRequestPermission })
 }
 
 /**
@@ -118,7 +157,7 @@ export async function turnOnTorch(
  * ```
  */
 export async function turnOffTorch(): Promise<boolean> {
-  return toggleTorch(false, false) // No permission check needed for turning off
+  return toggleTorch(false, { shouldRequestPermission: false }) // No permission check needed for turning off
 }
 
 /**

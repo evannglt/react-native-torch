@@ -48,7 +48,11 @@ abstract class HybridRNTorchSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun switchState(enabled: Boolean): Promise<Unit>
+  abstract fun switchState(enabled: Boolean, intensity: Double?): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getIntensity(): Promise<Double>
   
   @DoNotStrip
   @Keep

@@ -17,6 +17,7 @@ namespace margelo::nitro::lumawake::app::torch { class HybridRNTorchSpec; }
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>
+#include <optional>
 #include <string>
 
 // C++ helpers for Swift
