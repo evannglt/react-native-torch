@@ -6,6 +6,10 @@
 
 A modern, high-performance React Native library for controlling device torch/flashlight functionality. Built with Nitro Modules for optimal performance and comprehensive TypeScript support.
 
+## Disclaimer
+
+Android is currently not supported, I've built this as a way of discovering Nitro Modules and native programming, but making it public if that can help!
+
 ## ✨ Features
 
 - 🚀 **High Performance**: Built with Nitro Modules for native-level performance
